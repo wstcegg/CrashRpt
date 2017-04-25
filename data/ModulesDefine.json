@@ -1,0 +1,232 @@
+{
+  "module": {
+    "DataCenter": {
+      "main": "李盛"
+    },
+    "AppMonitorFactory": {
+      "main": "SWC"
+    },
+    "AnaTools": {
+      "main": "SWC"
+    },
+    "AdbWinApi": {
+      "main": "SWC"
+    },
+    "AdbWinUsbApi": {
+      "main": "SWC"
+    },
+    "AnalyticBox": {
+      "main": "SWC"
+    },
+    "BaseMisc": {
+      "main": "SWC"
+    },
+    "BusinessRegFunc": {
+      "main": "黄晓宁"
+    },
+    "BusinessElementCommon": {
+      "main": "公共"
+    },
+    "BusinessElementGraphBase": {
+      "main": "黄晓宁"
+    },
+    "BusinessElementControl": {
+      "main": "公共"
+    },
+    "ConfigFactory": {
+      "main": "李盛"
+    },
+    "CefWebClient": {
+      "main": "SWC"
+    },
+    "CommandCenterFactory": {
+      "main": "黄晓宁"
+    },
+    "DialogCommonFactory": {
+      "main": "公共"
+    },
+    "DialogFCFactory": {
+      "main": "刘旻"
+    },
+    "DeltaBuilder": {
+      "main": "SWC"
+    },
+    "Dozlib": {
+      "main": "SWC"
+    },
+    "ElementBase": {
+      "main": "李盛"
+    },
+    "ElementBusinessBaseFactory": {
+      "main": "刘旻"
+    },
+    "ElementCustomLayoutFactory": {
+      "main": "李盛"
+    },
+    "ElementF10Factory": {
+      "main": "王潘"
+    },
+    "ElementFenJiaFactory": {
+      "main": "王潘"
+    },
+    "ElementIndicateFactory": {
+      "main": "黄晓宁"
+    },
+    "ElementKlineFactory": {
+      "main": "黄晓宁"
+    },
+    "ElementL2TongjiFactory": {
+      "main": "严鹏飞"
+    },
+    "ElementLHBFactory": {
+      "main": "王潘"
+    },
+    "ElementMingXiFactory": {
+      "main": "王潘"
+    },
+    "ElementMoneyRankFactory": {
+      "main": "严鹏飞"
+    },
+    "ElementMoneyViewFactory": {
+      "main": "严鹏飞"
+    },
+    "ElementMultiTrendFactory": {
+      "main": "王潘"
+    },
+    "ElementNavigatePageFactory": {
+      "main": "严鹏飞"
+    },
+    "ElementNewsFactory": {
+      "main": "黄晓宁"
+    },
+    "ElementPaidStockFactory": {
+      "main": "王潘"
+    },
+    "ElementQuoteFactory": {
+      "main": "王潘"
+    },
+    "ElementRankFactory": {
+      "main": "严鹏飞"
+    },
+    "ElementRtlineFactory": {
+      "main": "王潘"
+    },
+    "ElementStkSelectFactory": {
+      "main": "严鹏飞"
+    },
+    "ElementStockListFactory": {
+      "main": "魏学士"
+    },
+    "ElementSwitchFactory": {
+      "main": "刘旻"
+    },
+    "ElementTradeFactory": {
+      "main": "刘旻"
+    },
+    "ElementWebBrowserFactory": {
+      "main": "黄晓宁"
+    },
+    "ElementWebPageFactory": {
+      "main": "SWC"
+    },
+    "EMDUnpackager": {
+      "main": "SWC"
+    },
+    "EmfcCore": {
+      "main": "李勇"
+    },
+    "emflex": {
+      "main": "SWC"
+    },
+    "EMTrade": {
+      "main": "刘旻"
+    },
+    "EventProcessorFactory": {
+      "main": "李盛"
+    },
+    "ExtElementsFactory": {
+      "main": "SWC"
+    },
+    "ElementsFactory": {
+      "main": "SWC"
+    },
+    "FrameControls": {
+      "main": "李盛"
+    },
+    "FrameBase": {
+      "main": "SWC"
+    },
+    "GlobalEnvironment": {
+      "main": "SWC"
+    },
+    "HttpComEngine": {
+      "main": "SWC"
+    },
+    "HotKeyManagerFactory": {
+      "main": "刘付伟明"
+    },
+    "LogManager": {
+      "main": "SWC"
+    },
+    "libconfig++": {
+      "main": "SWC"
+    },
+    "libcurl2": {
+      "main": "SWC"
+    },
+    "libcef": {
+      "main": "刘旻"
+    },
+    "LibEncrypt": {
+      "main": "SWC"
+    },
+    "LibMarkup": {
+      "main": "SWC"
+    },
+    "LogicalUnitFactory": {
+      "main": "SWC"
+    },
+    "mfc80xud": {
+      "main": "SWC"
+    },
+    "mfc80xU": {
+      "main": "SWC"
+    },
+    "ModuleManager": {
+      "main": "SWC"
+    },
+    "MonitorManager": {
+      "main": "严鹏飞"
+    },
+    "ProductInfo": {
+      "main": "SWC"
+    },
+    "ResourceFactory": {
+      "main": "SWC"
+    },
+    "RollBackOperFactory": {
+      "main": "李盛"
+    },
+    "SCILEXER": {
+      "main": "SWC"
+    },
+    "ScrollbarTest": {
+      "main": "SWC"
+    },
+    "SWCDialog": {
+      "main": "SWC"
+    },
+    "TransactionCaller": {
+      "main": "SWC"
+    },
+    "WebDataProvider": {
+      "main": "黄晓宁"
+    },
+    "WindowToolFactory": {
+      "main": "黄晓宁"
+    }
+  },
+  "class": {
+    "CElementGuBa": "刘旻"
+  }
+}

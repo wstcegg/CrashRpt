@@ -1,0 +1,50 @@
+{
+    "download": {
+        "crash_report": {
+            "url": "http://222.73.55.231/BugTrap/reports/swcSelf8.9.1/",
+            "idx_beg": 300000,
+            "idx_end": 308192
+        },
+        "symbol":{
+            "url": "ftp://172.16.87.123/swc_free_build/swc_free_bin_4487.zip"
+        }
+    },
+    "path": {
+        "dumpload_dll1": "runtime\\CrashRptProbe1401.dll",
+        "dumpload_dll": "runtime\\dumploader.dll",
+        "module_define": "data\\ModulesDefine.json",
+        "invalid_define": "data\\invalid.txt",
+        "xls": "data\\analyze_result.xls",
+        "symbol_folder": "D:\\code\\TOOLS\\released_program\\swc_free_bin_4521\\bin\\release",
+        "folder_prefix": "error_report_",
+        "dump_name": "crashdump.dmp",
+        "dump_xml": "dmp.xml",
+        "relative": {
+            "report_folder": "reports",
+            "zip_folder": "zip",
+            "unzip_folder": "unzip",
+            "classified_folder": "classified"
+        }
+    },
+    "filter": {
+        "class": {
+            "exclude": [
+                "std"
+            ],
+            "include": [
+            ]
+        }
+    },
+    "zip":{
+        "num_move": 3,
+        "num_extract": 1
+    },
+    "other":{
+        "thread_num": 4,
+        "repeat_num": 1,
+        "client_mode": true,
+        "retrieve_webpage": true,
+        "off_line": false,
+        "write_ini": true
+    }
+}

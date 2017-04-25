@@ -1,0 +1,9 @@
+<miniDump>
+	<stack>
+		<frame lineNum="755" module="GlobalEnvironment.dll" offset="6520964" offset64="132" srcFile="d:\project\svnroot\luke\trunk_3_layer\src\globalenvironment\globalenvlite.cpp" symbol="CGlobalEnvLite::ReleaseMonitor" />
+		<frame lineNum="200" module="GlobalEnvironment.dll" offset="6510633" offset64="409" srcFile="d:\project\svnroot\luke\trunk_3_layer\src\globalenvironment\globalenvlite.cpp" symbol="CGlobalEnvLite::ReleaseObject" />
+		<frame lineNum="126" module="-1" offset="4206008" offset64="88" srcFile="d:\project\svnroot\luke\trunk_3_layer\src\swcapp\swcapp.cpp" symbol="ReleaseGlobal" />
+		<frame lineNum="794" module="-1" offset="4214414" offset64="14" srcFile="d:\project\svnroot\luke\trunk_3_layer\src\swcapp\swcapp.cpp" symbol="CSwcAppApp::ExitInstance" />
+		<frame lineNum="-1" module="-1" offset="4470000" offset64="0" srcFile="" symbol="theApp" />
+	</stack>
+</miniDump>
