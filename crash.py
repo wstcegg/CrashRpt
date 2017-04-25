@@ -150,12 +150,13 @@ class MyArgParse:
         else:
             print('重复执行')
 
-        while True:
-            user_input = input('本次查询命令是否正确？(Y/N)')
-            if user_input == 'Y' or user_input == 'y':
-                return True
-            elif user_input == 'N' or user_input == 'n':
-                return False
+        if self.args.confirm_cmd:
+            while True:
+                user_input = input('本次查询命令是否正确？(Y/N)')
+                if user_input == 'Y' or user_input == 'y':
+                    return True
+                elif user_input == 'N' or user_input == 'n':
+                    return False
 
         return True
 
@@ -170,6 +171,7 @@ class MyArgParse:
 
     def parse_args(self):
         ap = argparse.ArgumentParser()
+        ap.add_argument("-cc", "--confirm_cmd", help="confirm_command_line", action='store_true')
         ap.add_argument("-u", "--url", help=self.item_names[0], type=str)
         ap.add_argument("-ib", "--idx_beg", help=self.item_names[1], type=int)
         ap.add_argument("-ie", "--idx_end", help=self.item_names[2], type=int)

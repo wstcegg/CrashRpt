@@ -502,19 +502,20 @@ class DirCleaner:
         for root, dirs, files in os.walk(self.conf.zip_folder):
             for file in files:
                 fname = os.path.basename(file)
-                print(fname, file)
                 if fname.startswith(self.conf.folder_prefix) \
                         and fname.endswith(".zip"):
-                    self.remove_file(os.path.join(root, file))
+                    # print(fname, file)
+                    DirCleaner.remove_file(os.path.join(root, file))
 
     def clean_unzip(self):
         for root, dirs, files in os.walk(self.conf.unzip_folder):
             for dir in dirs:
                 dir_name = os.path.basename(dir)
                 if dir_name.startswith(self.conf.folder_prefix):
-                    self.remove_file(os.path.join(root, dir))
+                    DirCleaner.remove_file(os.path.join(root, dir))
 
-    def remove_file(self, file_path):
+    @staticmethod
+    def remove_file(file_path):
         try:
             if os.path.exists(file_path):
                 write_information("removing old files: %s" % file_path)
