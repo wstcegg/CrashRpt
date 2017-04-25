@@ -10,6 +10,14 @@ import sys
 from time import sleep
 
 
+def list_to_str(data_list):
+    s = ""
+    for elem in data_list:
+        s += " "
+        s += str(elem)
+    return s
+
+
 def write_information(info, thread_id=-1):
     if thread_id >= 0:
         info = str('[thread %d] ' % thread_id) + info

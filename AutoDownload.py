@@ -304,8 +304,22 @@ class JobAssigner:
         # 服务端模式下，忽略已归类文件夹
         if ignore_classified:
             exclude_list = self.get_classified_file()
-            # print("exclude_list: ", exclude_list)
+
+            # info = IOHelper.list_to_str(exclude_list)
+            # write_information("--exclude-------------------------------------------------------")
+            # write_information(info)
+
+            # info = IOHelper.list_to_str(self.report_list)
+            # write_information("--report list 1-------------------------------------------------------")
+            # write_information(info)
+
             self.report_list = list(set(self.report_list) - set(exclude_list))
+
+        self.report_list.sort()
+
+        # info = IOHelper.list_to_str(self.report_list)
+        # write_information("--report list 2-------------------------------------------------------")
+        # write_information(info)
 
     def go(self, thread_num, beg_idx, end_idx, enquire_webpage=False, ignore_classified=False, remove_after_use=False):
         #
@@ -313,7 +327,7 @@ class JobAssigner:
         # JobAssigner.delete_files(self.zip_dir, self.report_list, self.conf)
 
         write_information('totally [%d] files to proceed, thread number %d'
-                                 % (len(self.report_list), self.thread_num))
+                          % (len(self.report_list), self.thread_num))
 
         #
         thread_file_list = [[] for i in range(self.thread_num)]

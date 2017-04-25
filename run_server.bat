@@ -6,5 +6,5 @@ python crash.py     ^
 --report_folder reports ^
 --symbol_folder D:\\code\\TOOLS\\released_program\\swc_free_bin_4521\\bin\\release  ^
 --invalid_define data\\invalid.txt  ^
---retrieve_webpage  ^
+--retrieve_webpage ^
 --repeat_num 1
