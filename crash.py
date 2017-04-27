@@ -216,7 +216,7 @@ def client_job(conf, md):
 def server_job(conf, md):
     print('服务端模式启动')
     dc = IOHelper.DirCleaner(conf)
-    dc.clean_zip()
+    # dc.clean_zip()
     dc.clean_unzip()
 
     AutoDownload.download_analyze(conf, md, repeat_num=conf.repeat_num,

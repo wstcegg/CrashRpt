@@ -367,7 +367,7 @@ class JobAssigner:
         p_name = re.compile(r'>(error_report_([\d]*).zip)<')
         id_list = p_name.findall(page_info)  # currently unsorted
         # print(id_list)
-        id_list = sorted(id_list, key=lambda x: x[1])
+        id_list = sorted(id_list, key=lambda x: int(x[1]))
         write_information('totally <%d> files found on server, ranging from %s to %s'
                           % (len(id_list), id_list[0][1], id_list[-1][1]))
 

@@ -1,12 +1,12 @@
 {
     "download": {
         "crash_report": {
-            "url": "http://222.73.55.231/BugTrap/reports/swcSelf8.9.1/",
+            "url": "http://222.73.55.231/BugTrap/reports/swcSelf8.9.2.4578/",
             "idx_beg": 300000,
             "idx_end": 308192
         },
         "symbol":{
-            "url": "ftp://172.16.87.123/swc_free_build/swc_free_bin_4487.zip"
+            "url": "ftp://172.16.87.123/......."
         }
     },
     "path": {
@@ -15,7 +15,7 @@
         "module_define": "data\\ModulesDefine.json",
         "invalid_define": "data\\invalid.txt",
         "xls": "data\\analyze_result.xls",
-        "symbol_folder": "D:\\code\\TOOLS\\released_program\\swc_free_bin_4521\\bin\\release",
+        "symbol_folder": "D:\\code\\TOOLS\\released_program\\swc_free_bin_4578\\bin\\release",
         "folder_prefix": "error_report_",
         "dump_name": "crashdump.dmp",
         "dump_xml": "dmp.xml",
