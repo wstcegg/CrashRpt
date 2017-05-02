@@ -102,3 +102,6 @@ release/
 
 # pycharm
 .idea
+
+# my generate
+*.xls

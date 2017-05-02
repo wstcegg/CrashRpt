@@ -304,22 +304,9 @@ class JobAssigner:
         # 服务端模式下，忽略已归类文件夹
         if ignore_classified:
             exclude_list = self.get_classified_file()
-
-            # info = IOHelper.list_to_str(exclude_list)
-            # write_information("--exclude-------------------------------------------------------")
-            # write_information(info)
-
-            # info = IOHelper.list_to_str(self.report_list)
-            # write_information("--report list 1-------------------------------------------------------")
-            # write_information(info)
-
             self.report_list = list(set(self.report_list) - set(exclude_list))
 
         self.report_list.sort()
-
-        # info = IOHelper.list_to_str(self.report_list)
-        # write_information("--report list 2-------------------------------------------------------")
-        # write_information(info)
 
     def go(self, thread_num, beg_idx, end_idx, enquire_webpage=False, ignore_classified=False, remove_after_use=False):
         #
@@ -416,7 +403,7 @@ def prepare_dll(conf):
     return True
 
 
-def download_analyze(conf, md, repeat_num=-1, interval=5, ignore_classified=False, remove_after_use=False):
+def fetch_analyze(conf, md, repeat_num=-1, interval=5, ignore_classified=False, remove_after_use=False):
     # if not prepare_log(conf):
     #     write_information('prepare log failed!')
     #     return
@@ -442,6 +429,13 @@ def download_analyze(conf, md, repeat_num=-1, interval=5, ignore_classified=Fals
             count = 0
         write_information("<The %s time>" % count)
         count += 1
+
+        # 清理之前失效的临时文件夹
+        if remove_after_use:
+            dc = IOHelper.DirCleaner(conf)
+            # dc.clean_zip()
+            dc.clean_unzip()
+
         js.go(conf.thread_num, conf.idx_beg, conf.idx_end,
               enquire_webpage=conf.retrieve_webpage,
               ignore_classified=ignore_classified,
@@ -460,7 +454,7 @@ def main():
     md = Initialize.MD()
     md.load(conf.module_define)
 
-    download_analyze(conf, md)
+    fetch_analyze(conf, md)
 
 
 if __name__ == '__main__':

@@ -208,22 +208,21 @@ class MyArgParse:
 def client_job(conf, md):
     print('客户端模式启动')
 
-    report_list = AutoDownload.download_analyze(conf, md, repeat_num=1, interval=1)
+    report_list = AutoDownload.fetch_analyze(conf, md, repeat_num=1, interval=1)
     analyze.analyze_client(conf, md, report_list)
     # excel_.update_xml(conf, md)
 
 
 def server_job(conf, md):
     print('服务端模式启动')
-    dc = IOHelper.DirCleaner(conf)
-    # dc.clean_zip()
-    dc.clean_unzip()
+    # dc = IOHelper.DirCleaner(conf)
+    # # dc.clean_zip()
+    # dc.clean_unzip()
 
-    AutoDownload.download_analyze(conf, md, repeat_num=conf.repeat_num,
-                                  interval=1,
-                                  remove_after_use=True,
-                                  ignore_classified=True)
-    # analyze.analyze_server(conf, md, report_id, invalid_records)
+    AutoDownload.fetch_analyze(conf, md, repeat_num=conf.repeat_num,
+                               interval=15,
+                               remove_after_use=True,
+                               ignore_classified=True)
 
 
 def prepare_log(conf):
@@ -264,15 +263,15 @@ def main():
     parser = MyArgParse()
     parser.parse_args()
 
-    # 准备日志文件
-    if not prepare_log(conf):
-        return
-
     if not parser.is_valid():       # 命令行参数非法
         error_message = parser.command_error()
         print(error_message)
     elif parser.is_client_side():   # 客户端模式
         conf.client_mode = True
+
+        # 准备日志文件
+        if not prepare_log(conf):
+            return
         client_job(conf, md)
     else:                           # 服务端模式
         # 读取无效记录文件
@@ -283,6 +282,10 @@ def main():
         # 利用命令行参数，更新配置参数
         conf = parser.update_config(conf)
         conf.client_mode = False
+
+        # 准备日志文件
+        if not prepare_log(conf):
+            return
         server_job(conf, md)
 
 if __name__ == "__main__":

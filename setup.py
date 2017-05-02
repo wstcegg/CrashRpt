@@ -6,8 +6,7 @@ import py2exe
 print('123123')
 
 data_files = [('data', ['data\config.json', 'data\ModulesDefine.json', 'data\invalid.txt']),
-              ('runtime', ['runtime\CrashRptProbe1401.dll',
-                           'runtime\dumploader.dll',
+              ('runtime', ['runtime\dumploader.dll',
                            'runtime\dbghelp.dll']),
               ('.', ['run_server.bat'])]
 setup(

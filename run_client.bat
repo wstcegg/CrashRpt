@@ -1,1 +1,1 @@
-python crash.py -c
+python crash.py --client

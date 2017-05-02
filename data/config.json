@@ -2,8 +2,8 @@
     "download": {
         "crash_report": {
             "url": "http://222.73.55.231/BugTrap/reports/swcSelf8.9.2.4578/",
-            "idx_beg": 300000,
-            "idx_end": 308192
+            "idx_beg": -1,
+            "idx_end": -1
         },
         "symbol":{
             "url": "ftp://172.16.87.123/......."
