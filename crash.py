@@ -191,6 +191,9 @@ class MyArgParse:
         conf.idx_beg = self.args.idx_beg
         conf.idx_end = self.args.idx_end
         conf.report_folder = self.args.report_folder
+        conf.zip_folder = self.args.zip_folder
+        conf.unzip_folder = self.args.unzip_folder
+        conf.classified_folder = self.args.classified_folder
         conf.symbol_folder = self.args.symbol_folder
         conf.invalid_define = self.args.invalid_define
 

@@ -1,2 +1,1 @@
-GlobalEnvironment   SWC CGlobalEnvLite::ReleaseMonitor_757
-GlobalEnvironment   SWC CGlobalEnvLite::ReleaseMonitor_759
+GlobalEnvironment   SWC CGlobalEnvLite::ReleaseMonitor

@@ -19,7 +19,7 @@ def copy_helper_common(src, dst, fname):
 
 def main():
     # for python file
-    src_folder = r"E:/debug_/INP/totallynew/release/"
+    src_folder = r"E:/debug_/INP/totallynew/Release/"
     dst_folder = r"../../runtime/"
 
     fname = 'dumploader.dll'

@@ -98,15 +98,23 @@ class AnalyzeOne:
             return -2
 
         # classify file
-        record = IOHelper.xls_record()
-        record.module = dil2.module_name
-        record.manager = dil2.manager_name
-        record.line = dil2.line_name
-        if record not in invalid_records:
-            return 0
-        else:
-            return -1
+        for invalid_rec in invalid_records:
+            if dil2.module_name == invalid_rec.module \
+                    and dil2.manager_name == invalid_rec.manager \
+                    and dil2.line_name.startswith(invalid_rec.line):
+                return -1
+        return 0
 
+
+        # record = IOHelper.xls_record()
+        # record.module = dil2.module_name
+        # record.manager = dil2.manager_name
+        # record.line = dil2.line_name
+        # if record not in invalid_records:
+        #     return 0
+        # else:
+        #     return -1
+        ###############
         # if record not in invalid_records:
         #     folder = self.conf.classified_folder + '\\valid\\'
         #     if not os.path.exists(folder):
@@ -137,7 +145,7 @@ class AnalyzeAll:
         # find all files to be processed
         # and create file_dict for later removing files
         for root, dirs, files in os.walk(unzip_folder):
-            if root == unzip_folder:    # only iterate direct sub folder
+            if root == unzip_folder:  # only iterate direct sub folder
                 count = 0
                 for dir in dirs:
                     # ./ error_report_22307 / crashdump.dmp
@@ -214,8 +222,8 @@ class AnalyzeAll:
             dil2 = dumploader.DumpInfoLevel2()
             dil2.from_level1(dil1)
             frame_is_good = dil2.find_best_frame(md,
-                self.conf.clas_include,
-                self.conf.clas_exclude)
+                                                 self.conf.clas_include,
+                                                 self.conf.clas_exclude)
 
             # add into summary level 1
             if frame_is_good:

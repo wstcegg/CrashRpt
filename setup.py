@@ -34,7 +34,7 @@ setup(
                 'excel_',
                 'Initialize',
                 'IOHelper',
-                'summarize' 
+                'summarize'
                 ],
         }
     },

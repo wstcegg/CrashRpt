@@ -556,10 +556,11 @@ class ProgressBar:
         self.thresh_vals = []
         step = 100 / self.max_num_flush
 
-        pos = 0
+        pos = step
         while pos < 100:
-            pos += step
             self.thresh_vals.append(pos)
+            pos += step
+        self.thresh_vals.append(99.9999999)
 
     def update(self, pos, total):
         self.pos = pos
@@ -600,8 +601,7 @@ class VisualizeDownload:
         pb.prefix = 'Downloading '
         pb.suffix = 'Complete'
         pb.max_num_flush = 500
-        pb.prepare()
-        # print(pb.thresh_vals)
+        pb.prepare()    # 计算进度条刻度等
 
         for i in range(block_num):
             data = req.read(block_size)
