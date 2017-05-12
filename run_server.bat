@@ -2,8 +2,11 @@ python crash.py     ^
 --confirm_cmd   ^
 --url http://222.73.55.231/BugTrap/reports/classified_swcSelf8.9.2.4578/classified/invalid/   ^
 --idx_beg 15090	^
---idx_end 15090 ^
+--idx_end 15190 ^
 --report_folder reports ^
+--zip_folder E:\reports\ee\tmp\zip ^
+--unzip_folder E:\reports\ee\tmp\unzip ^
+--classified_folder classified ^
 --symbol_folder D:\\code\\TOOLS\\released_program\\swc_free_bin_4578\\bin\\release  ^
 --invalid_define data\\invalid.txt  ^
 --retrieve_webpage ^

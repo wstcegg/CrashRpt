@@ -50,6 +50,29 @@ class Conf:
         # additional
         self.invalid_records = []
 
+    def to_str(self):
+        str = "配置参数如下:\n\t"
+        str += "url: %s" % self.url + "\n\t"
+        str += "idx_beg: %d" % self.idx_beg + "\n\t"
+        str += "idx_end: %d" % self.idx_end + "\n\t"
+        str += "url_symbol: %s" % self.url_symbol + "\n\t"
+
+        str += "dumpload_dll: %s" % self.dumpload_dll + "\n\t"
+        str += "module_define: %s" % self.module_define + "\n\t"
+        str += "invalid_define: %s" % self.invalid_define + "\n\t"
+        str += "xls: %s" % self.url + "\n\t"
+        str += "symbol_folder: %s" % self.symbol_folder + "\n\t"
+        str += "folder_prefix: %s" % self.folder_prefix + "\n\t"
+        str += "dump_name: %s" % self.dump_name + "\n\t"
+        str += "dump_xml: %s" % self.dump_xml + "\n\t"
+        str += "dump_folder: %s" % self.dump_folder + "\n\t"
+        str += "report_folder: %s" % self.report_folder + "\n\t"
+        str += "zip_folder: %s" % self.zip_folder + "\n\t"
+        str += "unzip_folder: %s" % self.unzip_folder + "\n\t"
+        str += "classified_folder: %s" % self.classified_folder + "\n"
+
+        return str
+
     def load(self, fpath):
         file = codecs.open(fpath, 'r', 'utf-8')
         self.data = json.load(file)
@@ -70,6 +93,9 @@ class Conf:
         self.dump_xml = self.data['path']['dump_xml']
 
         self.report_folder = self.data['path']['relative']['report_folder']
+        self.zip_folder = self.data['path']['relative']['zip_folder']
+        self.unzip_folder = self.data['path']['relative']['unzip_folder']
+        self.classified_folder = self.data['path']['relative']['classified_folder']
         self.calc_folder()
 
         self.clas_include = self.data['filter']['class']['include']
@@ -86,19 +112,16 @@ class Conf:
         self.write_ini = self.data['other']['write_ini']
         
     def calc_folder(self):
-        self.zip_folder = self.data['path']['relative']['zip_folder']
         if not os.path.isabs(self.zip_folder):
             # 如果zip_folder是相对路径, 为其拓展父路径report_folder，否则不作改变
             # report_folder / zip_folder
             self.zip_folder = os.path.join(self.report_folder, self.zip_folder)
 
-        self.unzip_folder = self.data['path']['relative']['unzip_folder']
         if not os.path.isabs(self.unzip_folder):
             # 如果unzip_folder是相对路径, 为其拓展父路径report_folder，否则不作改变
             # report_folder / unzip_folder
             self.unzip_folder = os.path.join(self.report_folder, self.unzip_folder)
 
-        self.classified_folder = self.data['path']['relative']['classified_folder']
         if not os.path.isabs(self.classified_folder):
             # 如果classified_folder是相对路径, 为其拓展父路径unzip_folder，否则不作改变
             # unzip_folder / classified_folder
