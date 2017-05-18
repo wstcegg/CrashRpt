@@ -227,7 +227,10 @@ class MyArgParse:
             if arg_value[0] == arg_idx:
                 prompt = arg_value[2]
 
-        return "Command Error:<%d> 请确认该命令参数: [%s]" % (arg_idx, prompt)
+        if 0 == arg_idx:
+            return "请重新输入命令"
+        else:
+            return "Command Error:<%d> 请确认该命令参数: [%s]" % (arg_idx, prompt)
 
     def parse_args(self):
         ap = argparse.ArgumentParser()
@@ -330,7 +333,7 @@ def server_job(conf, md):
         return
 
     AutoDownload.fetch_analyze(conf, md, repeat_num=conf.repeat_num,
-                               interval=15,
+                               interval=5,
                                remove_after_use=True,
                                ignore_classified=True)
 
@@ -345,8 +348,8 @@ def prepare_log(conf):
         # 日志格式
         log_formatter = logging.Formatter('%(asctime)s %(levelname)s:%(message)s')
 
-        my_handler = RotatingFileHandler(log_name, mode='a', maxBytes=5*1024*1024,
-                                         backupCount=1, encoding=None, delay=0)
+        my_handler = RotatingFileHandler(log_name, mode='a', maxBytes=10*1024*1024,
+                                         backupCount=2, encoding=None, delay=0)
         my_handler.setFormatter(log_formatter)
         my_handler.setLevel(logging.INFO)
 

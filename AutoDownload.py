@@ -18,6 +18,7 @@ import analyze
 # public
 probe_dll = None    # dll
 load_dump = None    # function
+load_dump2 = None    # function
 pdb_path = None
 
 
@@ -176,16 +177,20 @@ class Fetcher:
         info_buf = ctypes.create_string_buffer(128000)
 
         # load dump info through DLL
-        ret = load_dump(f1, f2, info_buf)
+        # ret = load_dump(f1, f2, info_buf)
+        ret = load_dump2(self.thread_id, f1, f2, info_buf)
         if 0 == ret:
             write_information("[load dump]: succeed!", self.thread_id)
 
-            # convert info into python xml format
-            info = info_buf.value.decode('utf-8')
-            # print(info)
-            dumpXML = ET.ElementTree(ET.fromstring(info))
-            dumpXML.write(xml_path, 'utf-8')
-            return True
+            try:
+                # convert info into python xml format
+                info = info_buf.value.decode('utf-8')
+                # print(info)
+                dumpXML = ET.ElementTree(ET.fromstring(info))
+                dumpXML.write(xml_path, 'utf-8')
+                return True
+            except Exception as e:
+                write_information("[parse XML]: failed!", self.thread_id)
 
         write_information("[load dump]: failed!", self.thread_id)
         return False
@@ -389,6 +394,7 @@ def prepare_symbol(conf):
 def prepare_dll(conf):
     global probe_dll
     global load_dump
+    global load_dump2
     global pdb_path
     probe_dll = ctypes.CDLL(conf.dumpload_dll)
     if not probe_dll:
@@ -397,6 +403,11 @@ def prepare_dll(conf):
     load_dump = probe_dll['load_dump']
     load_dump.restype = ctypes.c_int
     if not load_dump:
+        return False
+
+    load_dump2 = probe_dll['load_dump2']
+    load_dump.restype = ctypes.c_int
+    if not load_dump2:
         return False
 
     pdb_path = conf.symbol_folder
