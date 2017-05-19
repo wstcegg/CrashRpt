@@ -9,5 +9,4 @@ python crash.py     ^
 --classified_folder classified ^
 --symbol_folder D:\\code\\TOOLS\\released_program\\swc_free_bin_4578\\bin\\release  ^
 --invalid_define data\\invalid.txt  ^
---retrieve_webpage ^
 --repeat_num -1

@@ -54,11 +54,11 @@ class AnalyzeOne:
                 os.mkdir(folder)
             dst = folder + self.zip_name
 
-        # move files
+        # 复制文件，注意是调用shutil.copy2，同时复制文件创建和修改时间
         src = self.zip_path
         try:
             if os.path.exists(src) and not os.path.exists(dst):
-                shutil.copy(src, dst)
+                shutil.copy2(src, dst)
         except Exception as e:
             print('move file %s failed' % self.zip_name)
 

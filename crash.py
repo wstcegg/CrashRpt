@@ -149,7 +149,7 @@ class MyArgParse:
         if not self.args.repeat_num:
             self.error_code = int(-1 * self.args_info['repeat_num'][0])
             return False
-        print(self.args_info['repeat_num'][2], end='')
+        print(self.args_info['repeat_num'][2] + ': ', end='')
         if self.args.repeat_num > 0:
             print(self.args.repeat_num)
         else:
@@ -320,7 +320,8 @@ def client_job(conf, md):
     if not prepare_log(conf):
         return
 
-    report_list = AutoDownload.fetch_analyze(conf, md, repeat_num=1, interval=1)
+    report_list = AutoDownload.fetch_analyze(conf, md,
+                                             repeat_num=1, interval=1)
     analyze.analyze_client(conf, md, report_list)
     # excel_.update_xml(conf, md)
 
@@ -332,7 +333,12 @@ def server_job(conf, md):
     if not prepare_log(conf):
         return
 
-    AutoDownload.fetch_analyze(conf, md, repeat_num=conf.repeat_num,
+    # 服务端强制使用单线程
+    conf.thread_num = 1
+
+    # 下载并分析
+    AutoDownload.fetch_analyze(conf, md,
+                               repeat_num=conf.repeat_num,
                                interval=5,
                                remove_after_use=True,
                                ignore_classified=True)
@@ -349,7 +355,7 @@ def prepare_log(conf):
         log_formatter = logging.Formatter('%(asctime)s %(levelname)s:%(message)s')
 
         my_handler = RotatingFileHandler(log_name, mode='a', maxBytes=10*1024*1024,
-                                         backupCount=2, encoding=None, delay=0)
+                                         backupCount=3, encoding=None, delay=0)
         my_handler.setFormatter(log_formatter)
         my_handler.setLevel(logging.INFO)
 

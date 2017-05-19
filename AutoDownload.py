@@ -1,14 +1,18 @@
 import time
 import urllib.request
 import os
-from os.path import basename
 import shutil
 import re
 import zipfile
-import logging
 import xml.etree.ElementTree as ET
 import ctypes
 import threading
+
+import time
+import datetime
+import win32file
+import win32con
+
 
 import Initialize
 import IOHelper
@@ -46,6 +50,9 @@ class Fetcher:
         self.conf = conf
         self.md = md
 
+        # 服务端获取的当前zip文件的修改时间
+        self.datetime_str = ''
+
     def process(self, report_id):
         #
         dfn = IOHelper.DumpFileName(self.conf)
@@ -60,7 +67,7 @@ class Fetcher:
 
         self.status_valid = True    # will be modified in self.remove_file
 
-        # try to download
+        # 下载文件
         res = self.try_download(filename, self.zip_path)
         if not self.status_valid:
             self.status_valid = True
@@ -68,7 +75,15 @@ class Fetcher:
         if not res:
             return False
 
-        # try to unzip
+        # 修改文件时间
+        res = self.try_modifytime(filename, self.zip_path)
+        if not self.status_valid:
+            self.status_valid = True
+            return False
+        if not res:
+            return False
+
+        # 解压
         res = self.try_unzip(filename, self.zip_path, self.unzip_dir)
         if not self.status_valid:
             self.status_valid = True
@@ -76,7 +91,7 @@ class Fetcher:
         if not res:
             return False
 
-        # try to analyze
+        # 分析
         res = self.try_analyze(filename, self.zip_path, self.unzip_dir, dmp_path, xml_path)
         if not self.status_valid:
             self.status_valid = True
@@ -132,16 +147,67 @@ class Fetcher:
             url = self.url_base + filename
             write_information('[downloading]:\t%s' % filename, self.thread_id)
             try:
+                # 连接到文件URL
                 req = urllib.request.urlopen(url)
+
+                # 接收数据
                 data = req.read()
+
+                # 写入文件
                 with open(zip_path, 'wb') as f:
                     f.write(data)
+
+                # 从文件头中获取，字符串形式的文件修改时间
+                self.datetime_str = req.headers['last-modified']
+
+                print(zip_path)
+                print(self.datetime_str)
+
             except Exception as e:
-                # download exception, delete files
-                write_information('[download error]:\t%s ' % filename, self.thread_id)
+                # 下载和保存期间发生异常
+                write_information('[Download&Save error]:\t%s ' % filename, self.thread_id)
                 if os.path.exists(zip_path):
                     self.remove_file(zip_path)  # if no dirty file is stored, status is acceptable
                 ret = False
+        return ret
+
+    def try_modifytime(self, filename, zip_path):
+
+        if self.datetime_str == '':
+            return True
+
+        try:
+            # 文本形式时间解析为时间结构体
+            time_tuple = time.strptime(self.datetime_str, '%a, %d %b %Y %H:%M:%S %Z')
+
+            # 时间结构体转换为底层时间类型
+            time_ticks = time.mktime(time_tuple)
+
+            # 转换为可用的时间类型
+            time_windows = datetime.datetime.utcfromtimestamp(time_ticks).replace(tzinfo=datetime.timezone.utc)
+
+            # 创建待修改文件的句柄
+            winfile = win32file.CreateFile(
+                zip_path,
+                win32con.GENERIC_WRITE,
+                win32con.FILE_SHARE_READ | win32con.FILE_SHARE_WRITE | win32con.FILE_SHARE_DELETE,
+                None,
+                win32con.OPEN_EXISTING,
+                win32con.FILE_ATTRIBUTE_NORMAL,
+                None)
+
+            # 修改文件时间属性
+            win32file.SetFileTime(winfile, time_windows, time_windows, time_windows)
+
+            # 关闭文件
+            winfile.close()
+        except Exception as e:
+            #  修改文件时间发生异常
+            write_information('[Modify Time error]:\t%s ' % filename, self.thread_id)
+            if os.path.exists(zip_path):
+                self.remove_file(zip_path)  # if no dirty file is stored, status is acceptable
+            ret = False
+        ret = True
         return ret
 
     def try_unzip(self, filename, zip_path, unzip_path):

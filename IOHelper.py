@@ -481,7 +481,7 @@ class FileMover:
         print('moving files')
         for i, (src, dst) in enumerate(move_list):
             print("moving %d \n\t src: %s \n\t dst: %s" % (i, src, dst))
-            shutil.copy(src, dst)
+            shutil.copy2(src, dst)
 
     @staticmethod
     def remove_empty_dir(classified_folder):
