@@ -1,8 +1,8 @@
 python crash.py     ^
 --confirm_cmd   ^
---url http://222.73.55.231/BugTrap/reports/classified_swcSelf8.9.2.4578/classified/invalid/   ^
---idx_beg 15000	^
---idx_end 15100 ^
+--url http://222.73.55.231/BugTrap/reports/classified_swcSelf8.9.2.4578/classified/valid/   ^
+--idx_beg -1	^
+--idx_end -1 ^
 --report_folder reports ^
 --zip_folder zip ^
 --unzip_folder unzip ^

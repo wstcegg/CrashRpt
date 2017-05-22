@@ -7,6 +7,7 @@ import zipfile
 import xml.etree.ElementTree as ET
 import ctypes
 import threading
+import copy
 
 import time
 import datetime
@@ -24,6 +25,14 @@ probe_dll = None    # dll
 load_dump = None    # function
 load_dump2 = None    # function
 pdb_path = None
+
+
+# class TimeConverter:
+#     UTC_OFFSET_TIMEDELTA = datetime.datetime.utcnow() - datetime.datetime.now()
+#
+#     def toUTCTime(self, local_datetime):
+#         utc_datetime = local_datetime + TimeConverter.UTC_OFFSET_TIMEDELTA
+#         return utc_datetime
 
 
 class Fetcher:
@@ -50,10 +59,13 @@ class Fetcher:
         self.conf = conf
         self.md = md
 
-        # 服务端获取的当前zip文件的修改时间
-        self.datetime_str = ''
+    def process(self, report_id, f_info):
+        f_datetime = None
+        f_size = None
+        if f_info:
+            f_datetime = f_info[0]
+            f_size = f_info[1]
 
-    def process(self, report_id):
         #
         dfn = IOHelper.DumpFileName(self.conf)
         filename = dfn.zip_name_from_id(report_id)
@@ -76,7 +88,7 @@ class Fetcher:
             return False
 
         # 修改文件时间
-        res = self.try_modifytime(filename, self.zip_path)
+        res = self.try_modifytime(filename, self.zip_path, f_datetime)
         if not self.status_valid:
             self.status_valid = True
             return False
@@ -157,12 +169,6 @@ class Fetcher:
                 with open(zip_path, 'wb') as f:
                     f.write(data)
 
-                # 从文件头中获取，字符串形式的文件修改时间
-                self.datetime_str = req.headers['last-modified']
-
-                print(zip_path)
-                print(self.datetime_str)
-
             except Exception as e:
                 # 下载和保存期间发生异常
                 write_information('[Download&Save error]:\t%s ' % filename, self.thread_id)
@@ -171,20 +177,26 @@ class Fetcher:
                 ret = False
         return ret
 
-    def try_modifytime(self, filename, zip_path):
+    def try_modifytime(self, filename, zip_path, f_datetime):
+        ret = True
+        # 没有输入时间
+        if not f_datetime:
+            return ret
 
-        if self.datetime_str == '':
-            return True
+        # 转换为UTC时间
+        utc_offset = datetime.datetime.utcnow() - datetime.datetime.now()
+        f_datetime = f_datetime + utc_offset
+        f_datetime = f_datetime.replace(tzinfo=datetime.timezone.utc)
 
         try:
-            # 文本形式时间解析为时间结构体
-            time_tuple = time.strptime(self.datetime_str, '%a, %d %b %Y %H:%M:%S %Z')
-
-            # 时间结构体转换为底层时间类型
-            time_ticks = time.mktime(time_tuple)
-
-            # 转换为可用的时间类型
-            time_windows = datetime.datetime.utcfromtimestamp(time_ticks).replace(tzinfo=datetime.timezone.utc)
+            # # 文本形式时间解析为时间结构体
+            # time_tuple = time.strptime(self.datetime_str, '%a, %d %b %Y %H:%M:%S %Z')
+            #
+            # # 时间结构体转换为底层时间类型
+            # time_ticks = time.mktime(time_tuple)
+            #
+            # # 转换为可用的时间类型
+            # time_windows = datetime.datetime.utcfromtimestamp(time_ticks).replace(tzinfo=datetime.timezone.utc)
 
             # 创建待修改文件的句柄
             winfile = win32file.CreateFile(
@@ -197,7 +209,7 @@ class Fetcher:
                 None)
 
             # 修改文件时间属性
-            win32file.SetFileTime(winfile, time_windows, time_windows, time_windows)
+            win32file.SetFileTime(winfile, f_datetime, f_datetime, f_datetime)
 
             # 关闭文件
             winfile.close()
@@ -207,7 +219,6 @@ class Fetcher:
             if os.path.exists(zip_path):
                 self.remove_file(zip_path)  # if no dirty file is stored, status is acceptable
             ret = False
-        ret = True
         return ret
 
     def try_unzip(self, filename, zip_path, unzip_path):
@@ -281,6 +292,7 @@ class JobHandler(threading.Thread):
         super().__init__()
         self.thread_id = -1
         self.report_list = []
+        self.file_info_dict = {}
 
         self.repeat = 0
         self.num_succeed = 0
@@ -291,11 +303,11 @@ class JobHandler(threading.Thread):
 
         self.remove_after_use = False
 
-    def set_param(self, thread_id, report_list, conf, md, remove_after_use=False):
+    def set_param(self, thread_id, report_list, file_info_dict, conf, md, remove_after_use=False):
         self.thread_id = thread_id
         self.report_list = report_list
+        self.file_info_dict = copy.deepcopy(file_info_dict)
 
-        self.repeat = 0
         self.num_succeed = 0
 
         self.conf = conf
@@ -316,7 +328,8 @@ class JobHandler(threading.Thread):
             idx += 1
 
             # 下载、解压、获取崩溃堆栈
-            fe_ret = fe.process(report_id)
+            file_info = self.file_info_dict.get(report_id)  # 查询文件信息，失败返回None
+            fe_ret = fe.process(report_id, file_info)
             # if not fe_ret:                     # 然后判断执行是否成功
             #     continue
 
@@ -347,6 +360,7 @@ class JobAssigner:
         self.thread_num = conf.thread_num
 
         self.report_list = []
+        self.file_info_dict = {}
         self.conf = conf
         self.md = md
 
@@ -358,7 +372,7 @@ class JobAssigner:
                 if file.startswith(self.conf.folder_prefix) and file.endswith(".zip"):
                     report_list.append(dfn.get_report_id(file.split('.')[0]))
 
-        print('totally %d classified files' % len(report_list))
+        write_information('totally %d classified files' % len(report_list))
         return sorted(report_list)
 
     def get_file_list(self, thread_num, beg_idx, end_idx, enquire_webpage=False, ignore_classified=False):
@@ -370,7 +384,7 @@ class JobAssigner:
         if not enquire_webpage:
             self.report_list = [id for id in range(self.beg_idx, self.end_idx)]
         else:
-            self.report_list = self.parse_webpage(self.url_base, self.beg_idx, self.end_idx)
+            self.report_list, self.file_info_dict = self.parse_webpage2(self.url_base, self.beg_idx, self.end_idx)
 
         # 服务端模式下，忽略已归类文件夹
         if ignore_classified:
@@ -396,7 +410,7 @@ class JobAssigner:
         threads = []
         for i in range(self.thread_num):
             jh = JobHandler()
-            jh.set_param(i, thread_file_list[i], self.conf, self.md, remove_after_use=remove_after_use)
+            jh.set_param(i, thread_file_list[i], self.file_info_dict, self.conf, self.md, remove_after_use=remove_after_use)
             threads.append(jh)
 
             # print(thread_file_list[i])
@@ -440,17 +454,73 @@ class JobAssigner:
             new_id_list.append(idx)
         return new_id_list
 
-    # @staticmethod
-    # def delete_files(zip_dir, id_list, conf):
-    #     #
-    #     dfn = IOHelper.DumpFileName(conf)
-    #     file_list = dfn.zip_list_from_id_list(id_list)
-    #
-    #     for file_path in os.listdir(zip_dir):
-    #         filename = basename(file_path)
-    #         if os.path.exists(file_path) and filename not in file_list:
-    #             write_information('[removing]:\t%s' % (zip_dir + "\\" + file_path))
-    #             os.remove(zip_dir + "\\" + file_path)
+    @staticmethod
+    def parse_webpage2(url_base, start_idx, end_idx):
+        # 下载页面
+        try:
+            vd = IOHelper.VisualizeDownload(url_base)
+            page_info = vd.go()
+        except Exception as e:
+            write_information("failed to get web page!")
+            return [], {}
+
+        # # 保存页面
+        # with open('page', 'wb') as f:
+        #     f.write(page_info)
+
+        # decode to utf-8
+        page_info = page_info.decode('utf-8')
+        # print(page_info)
+
+        # 提取异常报告文件列表
+        # <br>
+        # 2017/5/18 17:26 888805
+        # <a href="http://222.73.55.231/BugTrap/reports/swcSelf8.9.3.4687/error_report_6.zip">
+        # error_report_6.zip
+        # </a>
+        pat = re.compile(r'<br>'                        # 起始标签
+                         r'([0-9/ :]*?)'                # 文件时间 日期 大小  （捕获变量0）
+                         r'<a href=".*?">'              # URL
+                         r'(error_report_([\d]*).zip)'  # 文件名（捕获变量1）    报告ID（捕获变量2）
+                         r'</a>', re.IGNORECASE)        # 结束标签
+
+        file_info_dict = {}     # report_id -> (time, size)
+        res = pat.findall(page_info)
+        for item in res:
+            if len(item) < 3:   # 至少三个捕获变量
+                continue
+
+            # 文件信息 文件名     报告ID
+            file_info, file_name, report_id = item
+
+            # 2017/5/18     17:26   888805
+            #   date        time    filesize
+            f_date_str, f_time_str, f_size_str = file_info.split()
+
+            f_date_time_str = f_date_str + " " + f_time_str                             # 拼接日期和时间字符串
+            f_date_time = datetime.datetime.strptime(f_date_time_str, "%Y/%m/%d %H:%M") # 获取当前时间(本地时间)
+            # print(f_date_time)
+            # print(type(item), file_info, file_name, report_id)
+
+            report_id = int(report_id)  # 报告编号
+            f_size = int(f_size_str)    # 文件大小
+            file_info_dict[report_id] = (f_date_time, f_size)
+
+        id_list = file_info_dict.keys()
+        id_list = sorted(id_list)
+        write_information('totally <%d> files found on server, ranging from %s to %s'
+                          % (len(id_list), id_list[0], id_list[-1]))
+
+        # create file list
+        new_id_list = []
+        for report_id in id_list:
+            idx = int(report_id)
+            if start_idx >= 0 and idx < start_idx:
+                continue
+            if end_idx >= 0 and idx > end_idx:
+                continue
+            new_id_list.append(idx)
+        return new_id_list, file_info_dict
 
 
 def prepare_symbol(conf):

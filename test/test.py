@@ -117,44 +117,43 @@ class MyArgParse:
         ap.add_argument("-l", "--local", help=self.item_names[6], action='store_true')
         self.args = ap.parse_args()
 
-def aaa():
-    def parse_webpage(url_base, start_idx, end_idx):
-        # download webpages
-        try:
-            vd = VisualizeDownload(url_base)
-            page_info = vd.go()
-        except Exception as e:
-            write_information("failed to get web page!")
-            return []
+def parse_webpage(url_base, start_idx, end_idx):
+    # download webpages
+    try:
+        vd = VisualizeDownload(url_base)
+        page_info = vd.go()
+    except Exception as e:
+        write_information("failed to get web page!")
+        return []
 
-        with open('page', 'wb') as f:
-            f.write(page_info)
+    with open('page', 'wb') as f:
+        f.write(page_info)
 
-        # decode to utf-8
-        page_info = page_info.decode('utf-8')
-        print(page_info)
+    # decode to utf-8
+    page_info = page_info.decode('utf-8')
+    print(page_info)
 
-        pat = re.compile(r'<br>([0-9/ :]*?)'  # 时间 日期 大小
-                         r'<a href=".*?">'  # URL
-                         r'(error_report_([\d]*).zip)</a>', re.IGNORECASE)  # 文件名
+    pat = re.compile(r'<br>([0-9/ :]*?)'  # 时间 日期 大小
+                     r'<a href=".*?">'  # URL
+                     r'(error_report_([\d]*).zip)</a>', re.IGNORECASE)  # 文件名
 
-        res = pat.findall(page_info)
-        for item in res:
-            if len(item) < 3:
-                continue
+    res = pat.findall(page_info)
+    for item in res:
+        if len(item) < 3:
+            continue
 
-            file_info, file_name, report_id = item
+        file_info, file_name, report_id = item
 
-            f_date_str, f_time_str, f_size_str = file_info.split()
+        f_date_str, f_time_str, f_size_str = file_info.split()
 
-            f_date_time_str = f_date_str + " " + f_time_str
-            f_date_time = datetime.strptime(f_date_time_str, "%Y/%m/%d %H:%M")
-            print(f_date_time)
+        f_date_time_str = f_date_str + " " + f_time_str
+        f_date_time = datetime.strptime(f_date_time_str, "%Y/%m/%d %H:%M")
+        print(f_date_time)
 
-            print(type(item), file_info, file_name, report_id)
-            # print(type(item), item)
+        print(type(item), file_info, file_name, report_id)
+        # print(type(item), item)
 
-        return
+    return
 
 
 if __name__ == '__main__':
