@@ -30,7 +30,7 @@ class RawDmpInfo:
             rframe.line_idx = int(f.get('lineNum'))
 
             if rframe.line_idx < 0:
-                rframe.line_idx =0
+                rframe.line_idx = 0
             self.rframes.append(rframe)
 
 

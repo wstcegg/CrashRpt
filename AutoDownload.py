@@ -178,27 +178,21 @@ class Fetcher:
         return ret
 
     def try_modifytime(self, filename, zip_path, f_datetime):
-        ret = True
         # 没有输入时间
         if not f_datetime:
-            return ret
+            write_information('[modify Time error]:\t%s ' % filename, self.thread_id)
+            return False
 
-        # 转换为UTC时间
-        utc_offset = datetime.datetime.utcnow() - datetime.datetime.now()
-        f_datetime = f_datetime + utc_offset
-        f_datetime = f_datetime.replace(tzinfo=datetime.timezone.utc)
-
+        ret = True
         try:
-            # # 文本形式时间解析为时间结构体
-            # time_tuple = time.strptime(self.datetime_str, '%a, %d %b %Y %H:%M:%S %Z')
-            #
-            # # 时间结构体转换为底层时间类型
-            # time_ticks = time.mktime(time_tuple)
-            #
-            # # 转换为可用的时间类型
-            # time_windows = datetime.datetime.utcfromtimestamp(time_ticks).replace(tzinfo=datetime.timezone.utc)
+            write_information('[modifying Time error]:\t%s ' % filename, self.thread_id)
 
-            # 创建待修改文件的句柄
+            # 转换为UTC时间
+            utc_offset = datetime.datetime.utcnow() - datetime.datetime.now()
+            f_datetime = f_datetime + utc_offset
+            f_datetime = f_datetime.replace(tzinfo=datetime.timezone.utc)
+
+            # 打开文件
             winfile = win32file.CreateFile(
                 zip_path,
                 win32con.GENERIC_WRITE,
@@ -228,7 +222,7 @@ class Fetcher:
             try:
                 z = zipfile.ZipFile(zip_path, 'r')
                 if self.dump_name in z.namelist():
-                    write_information("[unziping]\t%s " % filename, self.thread_id)
+                    write_information("[unzipping]\t%s " % filename, self.thread_id)
                     z.extract(self.dump_name, unzip_path)
             except Exception as e:
                 # unzip exception, delete files
@@ -464,9 +458,9 @@ class JobAssigner:
             write_information("failed to get web page!")
             return [], {}
 
-        # # 保存页面
-        # with open('page', 'wb') as f:
-        #     f.write(page_info)
+        # 保存页面
+        with open('page', 'wb') as f:
+            f.write(page_info)
 
         # decode to utf-8
         page_info = page_info.decode('utf-8')

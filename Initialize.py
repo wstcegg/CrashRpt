@@ -60,7 +60,7 @@ class Conf:
         str += "dumpload_dll: %s" % self.dumpload_dll + "\n\t"
         str += "module_define: %s" % self.module_define + "\n\t"
         str += "invalid_define: %s" % self.invalid_define + "\n\t"
-        str += "xls: %s" % self.url + "\n\t"
+        str += "xls: %s" % self.xls + "\n\t"
         str += "symbol_folder: %s" % self.symbol_folder + "\n\t"
         str += "folder_prefix: %s" % self.folder_prefix + "\n\t"
         str += "dump_name: %s" % self.dump_name + "\n\t"
