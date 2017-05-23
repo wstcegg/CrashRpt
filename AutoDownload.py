@@ -157,7 +157,7 @@ class Fetcher:
         ret = True
         if not os.path.exists(zip_path):
             url = self.url_base + filename
-            write_information('[downloading]:\t%s' % filename, self.thread_id)
+            write_information('[Download&Save]:\t%s' % filename, self.thread_id)
             try:
                 # 连接到文件URL
                 req = urllib.request.urlopen(url)
@@ -171,7 +171,7 @@ class Fetcher:
 
             except Exception as e:
                 # 下载和保存期间发生异常
-                write_information('[Download&Save error]:\t%s ' % filename, self.thread_id)
+                write_information('[Download&Save]:error\t%s ' % filename, self.thread_id)
                 if os.path.exists(zip_path):
                     self.remove_file(zip_path)  # if no dirty file is stored, status is acceptable
                 ret = False
@@ -180,12 +180,12 @@ class Fetcher:
     def try_modifytime(self, filename, zip_path, f_datetime):
         # 没有输入时间
         if not f_datetime:
-            write_information('[modify Time error]:\t%s ' % filename, self.thread_id)
+            write_information('[Modify time]: error\t%s ' % filename, self.thread_id)
             return False
 
         ret = True
         try:
-            write_information('[modifying Time error]:\t%s ' % filename, self.thread_id)
+            write_information('[Modify time]:\t%s ' % filename, self.thread_id)
 
             # 转换为UTC时间
             utc_offset = datetime.datetime.utcnow() - datetime.datetime.now()
@@ -209,7 +209,7 @@ class Fetcher:
             winfile.close()
         except Exception as e:
             #  修改文件时间发生异常
-            write_information('[Modify Time error]:\t%s ' % filename, self.thread_id)
+            write_information('[Modify time]: error\t%s ' % filename, self.thread_id)
             if os.path.exists(zip_path):
                 self.remove_file(zip_path)  # if no dirty file is stored, status is acceptable
             ret = False
@@ -222,11 +222,11 @@ class Fetcher:
             try:
                 z = zipfile.ZipFile(zip_path, 'r')
                 if self.dump_name in z.namelist():
-                    write_information("[unzipping]\t%s " % filename, self.thread_id)
+                    write_information("[unzip]\t%s " % filename, self.thread_id)
                     z.extract(self.dump_name, unzip_path)
             except Exception as e:
                 # unzip exception, delete files
-                write_information('[unzip error]:\t%s ' % zip_path, self.thread_id)
+                write_information('[unzip]: error\t%s ' % zip_path, self.thread_id)
                 if os.path.exists(zip_path):
                     self.remove_file(unzip_path)
                 if os.path.exists(unzip_path):
@@ -241,7 +241,7 @@ class Fetcher:
         if not os.path.exists(unzip_path):
             return True
 
-        write_information("[trying analyze] %s" % dmp_path, self.thread_id)
+        write_information("[load dump] %s" % dmp_path, self.thread_id)
 
         f1 = ctypes.c_char_p(dmp_path.encode('gb2312'))
         f2 = ctypes.c_char_p(pdb_path.encode('gb2312'))

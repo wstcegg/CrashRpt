@@ -339,7 +339,7 @@ def server_job(conf, md):
     # 下载并分析
     AutoDownload.fetch_analyze(conf, md,
                                repeat_num=conf.repeat_num,
-                               interval=5,
+                               interval=15,
                                remove_after_use=True,
                                ignore_classified=True)
 
@@ -389,15 +389,16 @@ def main():
         conf.client_mode = True
         client_job(conf, md)
     else:                           # 服务端模式
+        # 利用命令行参数，更新配置参数
+        conf = parser.update_config(conf)
+        conf.client_mode = False
+        print(conf.to_str())
+
         # 读取无效记录文件
         inva = Initialize.Invalid()
         inva.load(conf.invalid_define)
         conf.invalid_records = inva.invalid_list
 
-        # 利用命令行参数，更新配置参数
-        conf = parser.update_config(conf)
-        conf.client_mode = False
-        print(conf.to_str())
         server_job(conf, md)
 
 if __name__ == "__main__":
