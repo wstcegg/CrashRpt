@@ -468,13 +468,17 @@ class FileMover:
         for i, fname in enumerate(unzip_list):
             print("unziping: %d \t %s" % (i, fname))
 
-            zip_file = zipfile.ZipFile(fname)
+            try:
+                zip_file = zipfile.ZipFile(fname)
 
-            unzip_dir = fname[:-4]
-            if not os.path.isdir(unzip_dir):
-                os.mkdir(unzip_dir)
-                zip_file.extractall(unzip_dir + '\\')
-                zip_file.close()
+                unzip_dir = fname[:-4]
+                if not os.path.isdir(unzip_dir):
+                    os.mkdir(unzip_dir)
+                    zip_file.extractall(unzip_dir + '\\')
+                    zip_file.close()
+            except Exception as e:
+                print("unzip error")
+
 
     @staticmethod
     def move_files(move_list):

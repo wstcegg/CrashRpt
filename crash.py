@@ -397,6 +397,7 @@ def main():
         # 读取无效记录文件
         inva = Initialize.Invalid()
         inva.load(conf.invalid_define)
+        inva.print()
         conf.invalid_records = inva.invalid_list
 
         server_job(conf, md)

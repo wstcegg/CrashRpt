@@ -202,3 +202,9 @@ class Invalid:
             record.manager = data[1]
             record.line = data[2]
             self.invalid_list.append(record)
+
+    def print(self):
+        print("无效崩溃信息:")
+        for record in self.invalid_list:
+            IOHelper.write_information(
+                record.module + " " + record.manager + " " + record.line)

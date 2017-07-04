@@ -192,7 +192,7 @@ class SummaryLevel2:
                         # add to move list
                         move_list.append((src, dst))
 
-                        if 0 < conf.num_zip_extract <= i:
+                        if 0 <= conf.num_zip_extract <= i:
                             continue
 
                         # add to unzip list

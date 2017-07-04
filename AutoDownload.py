@@ -77,7 +77,7 @@ class Fetcher:
 
         self.remove_overdue(self.zip_path, self.unzip_dir, xml_path)
 
-        self.status_valid = True    # will be modified in self.remove_file
+        self.status_valid = True
 
         # 下载文件
         res = self.try_download(filename, self.zip_path)
@@ -339,7 +339,8 @@ class JobHandler(threading.Thread):
 
             if fe_ret:  # 第一步骤成功
                 if self.conf.client_mode or \
-                        (not self.conf.client_mode and an_ret):     # 第二步骤不需要或者不成功
+                        (not self.conf.client_mode and an_ret):
+                    # 客户端模式不需要第二步骤，或者服务端模式第二步骤执行成功
                     self.num_succeed += 1
 
 
@@ -380,7 +381,7 @@ class JobAssigner:
         else:
             self.report_list, self.file_info_dict = self.parse_webpage2(self.url_base, self.beg_idx, self.end_idx)
 
-        # 服务端模式下，忽略已归类文件夹
+        # 服务端模式下，忽略已归类文件夹中的文件
         if ignore_classified:
             exclude_list = self.get_classified_file()
             self.report_list = list(set(self.report_list) - set(exclude_list))

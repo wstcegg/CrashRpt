@@ -30,29 +30,25 @@ class AnalyzeOne:
 
         dfn = IOHelper.DumpFileName(self.conf)
         self.zip_name = dfn.zip_name_from_id(self.report_id)
-        self.zip_path = self.conf.zip_folder + '\\' + self.zip_name
+        self.zip_path = os.path.join(self.conf.zip_folder, self.zip_name)
 
         self.folder_name = dfn.folder_from_id(self.report_id)
-        self.folder_path = self.conf.unzip_folder + '\\' + self.folder_name
+        self.folder_path = os.path.join(self.conf.unzip_folder, self.folder_name)
 
     def process(self, invalid_records):
 
         ret = self.process_helper(invalid_records)
         if ret == 0:
-            folder = self.conf.classified_folder + '\\valid\\'
-            if not os.path.exists(folder):
-                os.mkdir(folder)
-            dst = folder + self.zip_name
+            folder = os.path.join(self.conf.classified_folder, 'valid')
         elif ret == -1:
-            folder = self.conf.classified_folder + '\\invalid\\'
-            if not os.path.exists(folder):
-                os.mkdir(folder)
-            dst = folder + self.zip_name
+            folder = os.path.join(self.conf.classified_folder, 'invalid')
         elif ret == -2:
-            folder = self.conf.classified_folder + '\\broken\\'
-            if not os.path.exists(folder):
-                os.mkdir(folder)
-            dst = folder + self.zip_name
+            folder = os.path.join(self.conf.classified_folder, 'broken')
+
+        if not os.path.exists(folder):
+            os.mkdir(folder)
+
+        dst = os.path.join(folder, self.zip_name)
 
         # 复制文件，注意是调用shutil.copy2，同时复制文件创建和修改时间
         src = self.zip_path

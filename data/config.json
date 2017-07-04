@@ -1,21 +1,20 @@
 {
     "download": {
         "crash_report": {
-            "url": "http://222.73.55.231/BugTrap/reports/swcSelf8.9.2.4578/",
+            "url": "http://222.73.55.231/BugTrap/reports/swcSelf8.9.3.4988/",
             "idx_beg": -1,
-            "idx_end": -1
+            "idx_end": 950
         },
         "symbol":{
             "url": "ftp://172.16.87.123/......."
         }
     },
     "path": {
-        "dumpload_dll1": "runtime\\CrashRptProbe1401.dll",
         "dumpload_dll": "runtime\\dumploader.dll",
         "module_define": "data\\ModulesDefine.json",
         "invalid_define": "data\\invalid.txt",
         "xls": "data\\analyze_result.xls",
-        "symbol_folder": "D:\\code\\TOOLS\\released_program\\swc_free_bin_4578\\bin\\release",
+        "symbol_folder": "D:\\code\\TOOLS\\released_program\\swc_free_bin_4988\\bin\\release",
         "folder_prefix": "error_report_",
         "dump_name": "crashdump.dmp",
         "dump_xml": "dmp.xml",
@@ -36,11 +35,11 @@
         }
     },
     "zip":{
-        "num_move": 3,
-        "num_extract": 1
+        "num_move": 2,
+        "num_extract": 0
     },
     "other":{
-        "thread_num": 4,
+        "thread_num": 1,
         "repeat_num": 1,
         "client_mode": true,
         "retrieve_webpage": true,
